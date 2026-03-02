@@ -57,6 +57,11 @@
 <body>
   <div class="card">
     <button type="button" class="btn" id="addToCalendar">Добавить в календарь</button>
+    <p id="tgHint" style="margin-top:1rem; max-width:320px; font-size:0.9rem; color:#ccc; display:none;">
+      Похоже, ссылка открыта внутри Telegram. Нажми в меню Telegram пункт
+      «Открыть в Safari/браузере», а затем снова нажми кнопку — тогда событие
+      откроется сразу в календаре.
+    </p>
   </div>
 
   <script>
@@ -94,12 +99,28 @@
         return ics;
       }
 
+      function isTelegramInApp() {
+        var ua = navigator.userAgent || '';
+        return /Telegram/i.test(ua) || /TG_iOS|TG_Android/i.test(ua);
+      }
+
       function isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       }
 
       function doAddToCalendar() {
         var ics = buildICS();
+
+        if (isTelegramInApp()) {
+          // В Telegram WebView .ics почти всегда уходит в Files, а не в Календарь
+          // Показываем подсказку и не пытаемся навигировать
+          var hint = document.getElementById('tgHint');
+          if (hint) {
+            hint.style.display = 'block';
+          }
+          alert('Telegram открывает файл .ics во \"Файлы\". Нажми в меню Telegram \"Открыть в Safari/браузере\", а затем снова кнопку на этой странице.');
+          return;
+        }
 
         if (isMobile()) {
           // На мобильном (в т.ч. внутри Telegram) переходим на готовый .ics-файл

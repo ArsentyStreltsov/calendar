@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Вариант 7 — Blob через JS</title>
+</head>
+<body>
+  <h1>Вариант 7 — Blob через JS</h1>
+  <button onclick="downloadICS()">Добавить в календарь</button>
+
+  <script>
+    const ICS_CONTENT = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Calendar//RU',
+      'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      'UID:8march-2026-arsent@local',
+      'DTSTAMP:20260302T120000',
+      'DTSTART:20260308T090000',
+      'DTEND:20260308T100000',
+      'SUMMARY:8 марта',
+      'DESCRIPTION:поздравить маму с утра',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\\r\\n');
+
+    function downloadICS() {
+      const blob = new Blob([ICS_CONTENT], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'event.ics';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
+

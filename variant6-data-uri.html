@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Вариант 6 — data URI</title>
+</head>
+<body>
+  <h1>Вариант 6 — data URI</h1>
+  <p><a id="addLink" href="#">Добавить в календарь</a></p>
+
+  <script>
+    (function () {
+      var icsLines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Calendar//RU',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        'UID:8march-2026-arsent@local',
+        'DTSTAMP:20260302T120000',
+        'DTSTART:20260308T090000',
+        'DTEND:20260308T100000',
+        'SUMMARY:8 марта',
+        'DESCRIPTION:поздравить маму с утра',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ];
+
+      var ics = icsLines.join('\\r\\n');
+      var dataUri = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+      document.getElementById('addLink').setAttribute('href', dataUri);
+    })();
+  </script>
+</body>
+</html>
+
